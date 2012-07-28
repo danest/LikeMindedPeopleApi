@@ -13,9 +13,9 @@ group :development, :test do
   gem 'sqlite3'
 end
 
-gem "paperclip"
+#gem "paperclip"
 
-gem 'devise'
+#gem 'devise'
 
 
 gem 'simple_form', git: 'git://github.com/plataformatec/simple_form.git'
@@ -41,13 +41,13 @@ end
 
 gem 'jquery-rails'
 
-gem 'awesome_print'
+#gem 'awesome_print'
 
-gem 'populator'
+#gem 'populator'
 
-gem 'faker'
+#gem 'faker'
 
-gem 'yaml_db'
+#gem 'yaml_db'
 
 
 # To use ActiveModel has_secure_password
