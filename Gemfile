@@ -11,6 +11,7 @@ gem "paperclip"
 
 gem 'devise'
 
+
 gem 'simple_form', git: 'git://github.com/plataformatec/simple_form.git'
 
 gem 'nested_form', git: 'git://github.com/ryanb/nested_form.git'
@@ -29,6 +30,11 @@ group :assets do
 	gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 	
 end
+
+group :production do
+  gem 'pg'
+end
+
 
 gem 'jquery-rails'
 
