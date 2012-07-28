@@ -1,0 +1,17 @@
+<div class="page-header">
+	<h1><%= t('activerecord.models.characteristic') %></h1>
+</div>
+
+<p>
+  <b><%= t('activerecord.attributes.characteristic.key') %>:</b>
+  <%= @characteristic.key %>
+</p>
+<p>
+  <b><%= t('activerecord.attributes.characteristic.attributeCategories') %>:</b>
+  <%= @characteristic.attributeCategories %>
+</p>
+
+<div class="form-actions">
+	<%= link_to t('main.edit'), edit_characteristic_path(@characteristic), class: 'btn btn-primary' %>
+	<%= link_to t('main.cancel'), characteristics_path, class: 'btn' %>
+</div>

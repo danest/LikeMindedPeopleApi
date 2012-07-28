@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  key: MyString
+  attributeCategories: MyString
+
+two:
+  key: MyString
+  attributeCategories: MyString
