@@ -1,0 +1,15 @@
+<div class="page-header">
+	<h1><%%= t('activerecord.models.<%= singular_table_name %>') %></h1>
+</div>
+
+<% attributes.each do |attribute| -%>
+<p>
+  <b><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>:</b>
+  <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
+</p>
+<% end -%>
+
+<div class="form-actions">
+	<%%= link_to t('main.edit'), edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: 'btn btn-primary' %>
+	<%%= link_to t('main.cancel'), <%= index_helper %>_path, class: 'btn' %>
+</div>

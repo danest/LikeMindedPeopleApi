@@ -1,0 +1,30 @@
+<div class="page-header">
+	<h1><%%= t 'title.all' %> <%%= t('activerecord.models.<%= plural_table_name %>') %></h1>
+</div>
+
+<%%= link_to t('title.new') + ' ' + t('activerecord.models.<%= singular_table_name %>'), new_<%= singular_table_name %>_path, :class => 'btn btn-primary pull-right' %>
+<br/><br/>
+
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+		<tr>
+			<% attributes.each do |attribute| -%>
+			<th><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %></th>
+			<% end -%>
+			<th><%%= t('main.options') %></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<%%= content_tag_for(:tr, @<%= plural_table_name %>) do |<%= singular_table_name %>| %>
+			<% attributes.each do |attribute| -%>
+			<td><%%= <%= singular_table_name %>.<%= attribute.name %> %></td>
+			<% end -%>
+			<td>
+				<%%= link_to raw('<i class="icon-eye-open"></i>'), <%= singular_table_name %> %>
+				<%%= link_to raw('<i class="icon-edit"></i>'), edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %>
+				<%%= link_to raw('<i class="icon-remove"></i>'), <%= singular_table_name %>, confirm: t('main.confirm'), method: :delete %>
+			</td>
+		<%% end %>
+	</tbody>
+</table>
