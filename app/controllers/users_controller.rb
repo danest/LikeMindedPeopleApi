@@ -71,6 +71,20 @@ class UsersController < ApplicationController
       end
     end
   end
+  
+  def update_location
+    @user = User.where(fb_id: params[:fb_id]).first
+
+    respond_to do |format|
+      if uppdate_location(@user,JSON.parse(params[:location]))
+        format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.updated', model: @user.class.model_name.human)}" }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /users/1
   # DELETE /users/1.json
@@ -115,6 +129,18 @@ class UsersController < ApplicationController
     end
     
     true
+  end
+  
+  def uppdate_location(user,location_json)
+    location = Location.where(longitude: location_json['longitude'], latitude: location_json['latitude'], radius: location_json['radius']).first
+    location = Location.create!(longitude: location_json['longitude'], latitude: location_json['latitude'], radius: location_json['radius']) if location.blank?
+    interest_point = user.interest_points.where(rank: 0).first
+    if interest_point.present?
+      interest_point.update_attributes!(location_id: location.id)
+    else
+      interest_point = InterestPoint.create(location_id: location.id, rank: 0)
+      user.interest_points << interest_point
+    end
   end
   
 end

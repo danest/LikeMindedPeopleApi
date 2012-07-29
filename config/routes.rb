@@ -4,6 +4,7 @@ App::Application.routes.draw do
   resources :characteristics
 
   resources :users
+  put 'update_location/:fb_id' => 'users#update_location'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
