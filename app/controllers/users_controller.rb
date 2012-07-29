@@ -42,11 +42,11 @@ class UsersController < ApplicationController
   def create
     user_profile = JSON.parse(params[:user_profile])
     @user = User.new(user_profile['user'])
-    
-    #create_profile(user_profile['profile'])
 
     respond_to do |format|
       if @user.save
+        create_profile(@user, user_profile['profile'])
+        
         format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.created', model: @user.class.model_name.human)}" }
         format.json { render json: @user, status: :created, location: @user }
       else
@@ -83,4 +83,16 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  
+  private
+  
+  def create_profile(user, user_profile)
+    user_profile.each do |c|
+      characteristic = Characteristic.where(key: c['key'], attributeCategories: c['attributeCategories'])
+      characteristic = Characteristic.create!(key: c['key'], attributeCategories: c['attributeCategories']) if characteristic.blank?
+      user.profiles << Profile.new(characteristic_id: characteristic, likelihood: c['likelihood'])
+    end
+  end
+  
 end
