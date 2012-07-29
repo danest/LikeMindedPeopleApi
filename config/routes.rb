@@ -1,5 +1,6 @@
 App::Application.routes.draw do
   resources :locations
+  post 'filter_locations' => 'locations#index_filter'
 
   resources :characteristics
 

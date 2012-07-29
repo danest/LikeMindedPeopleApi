@@ -2,7 +2,17 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.within(5, :origin => [67.3,1])
+    @locations = Location.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @locations }
+    end
+  end
+  
+  def index_filter
+    location_filter = JSON.parse(params[:location_filter])
+    @locations = Location.within(location_filter['filter'], :origin => [location_filter['latitude'],location_filter['longitude']])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -76,7 +76,7 @@ class UsersController < ApplicationController
     @user = User.where(fb_id: params[:fb_id]).first
 
     respond_to do |format|
-      if uppdate_location(@user,JSON.parse(params[:location]))
+      if sync_location(@user,JSON.parse(params[:location]))
         format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.updated', model: @user.class.model_name.human)}" }
         format.json { head :no_content }
       else
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     true
   end
   
-  def uppdate_location(user,location_json)
+  def sync_location(user,location_json)
     location = Location.where(longitude: location_json['longitude'], latitude: location_json['latitude'], radius: location_json['radius']).first
     location = Location.create!(longitude: location_json['longitude'], latitude: location_json['latitude'], radius: location_json['radius']) if location.blank?
     interest_point = user.interest_points.where(rank: 0).first

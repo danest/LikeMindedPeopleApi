@@ -13,8 +13,8 @@ end
 gem 'geokit-rails3'
 
 group :development, :test do
-  #gem 'mysql2'
-  gem 'pg'
+  gem 'mysql2'
+  #gem 'pg'
 end
 
 #gem "paperclip"
