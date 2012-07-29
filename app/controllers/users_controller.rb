@@ -59,10 +59,10 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    @user = User.where(fb_id: params[:id]).first
 
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if sync_pois(@user,JSON.parse(params[:pois])['pois'])
         format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.updated', model: @user.class.model_name.human)}" }
         format.json { head :no_content }
       else
@@ -89,17 +89,32 @@ class UsersController < ApplicationController
   
   def create_profile(user, profile)
     profile.each do |c|
-      characteristic = Characteristic.where(key: c['key'], attributeCategories: c['attributeCategories'])
+      characteristic = Characteristic.where(key: c['key'], attributeCategories: c['attributeCategories']).first
       characteristic = Characteristic.create!(key: c['key'], attributeCategories: c['attributeCategories']) if characteristic.blank?
-      profile = Profile.where(characteristic_id: characteristic).first
+      profile = user.profiles.where(characteristic_id: characteristic).first
       if profile.present?
         profile.update_attributes!(likelihood: c['likelihood'])
       else
         profile = Profile.create(characteristic_id: characteristic, likelihood: c['likelihood'])
         user.profiles << profile
       end
-      
     end
+  end
+  
+  def sync_pois(user, pois)
+    pois.each do |poi|
+      location = Location.where(longitude: poi['longitude'], latitude: poi['latitude'], radius: poi['radius']).first
+      location = Location.create!(longitude: poi['longitude'], latitude: poi['latitude'], radius: poi['radius']) if location.blank?
+      interest_point = user.interest_points.where(location_id: location).first
+      if interest_point.present?
+        interest_point.update_attributes!(rank: poi['rank'])
+      else
+        interest_point = InterestPoint.create(user_id: user, location_id: location, rank: poi['rank'])
+        user.interest_points << interest_point
+      end
+    end
+    
+    true
   end
   
 end
