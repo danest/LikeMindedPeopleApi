@@ -91,11 +91,11 @@ class UsersController < ApplicationController
     profile.each do |c|
       characteristic = Characteristic.where(key: c['key'], attributeCategories: c['attributeCategories']).first
       characteristic = Characteristic.create!(key: c['key'], attributeCategories: c['attributeCategories']) if characteristic.blank?
-      profile = user.profiles.where(characteristic_id: characteristic).first
+      profile = user.profiles.where(characteristic_id: characteristic.id).first
       if profile.present?
         profile.update_attributes!(likelihood: c['likelihood'])
       else
-        profile = Profile.create(characteristic_id: characteristic, likelihood: c['likelihood'])
+        profile = Profile.create(characteristic_id: characteristic.id, likelihood: c['likelihood'])
         user.profiles << profile
       end
     end
@@ -105,11 +105,11 @@ class UsersController < ApplicationController
     pois.each do |poi|
       location = Location.where(longitude: poi['longitude'], latitude: poi['latitude'], radius: poi['radius']).first
       location = Location.create!(longitude: poi['longitude'], latitude: poi['latitude'], radius: poi['radius']) if location.blank?
-      interest_point = user.interest_points.where(location_id: location).first
+      interest_point = user.interest_points.where(location_id: location.id).first
       if interest_point.present?
         interest_point.update_attributes!(rank: poi['rank'])
       else
-        interest_point = InterestPoint.create(user_id: user, location_id: location, rank: poi['rank'])
+        interest_point = InterestPoint.create(location_id: location.id, rank: poi['rank'])
         user.interest_points << interest_point
       end
     end
