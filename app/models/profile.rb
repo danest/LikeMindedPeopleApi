@@ -3,4 +3,9 @@ class Profile < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :characteristic
+  
+  def could_be
+    (likelihood > 0.5)
+  end
+  
 end

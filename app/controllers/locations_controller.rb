@@ -102,9 +102,9 @@ class LocationsController < ApplicationController
     
     locations.each do |l|
       if (moment == "Now")
-        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_now_count: people_now_count(l)}
+        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, important_characteristics: l.important_characteristics, people_now_count: people_now_count(l)}
       elsif (moment == "History")
-        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_history_count: people_history_count(l)}
+        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, important_characteristics: l.important_characteristics, people_history_count: people_history_count(l)}
       end
     end
     
@@ -112,25 +112,35 @@ class LocationsController < ApplicationController
   end
   
   def people_now_count(location)
-    count = 0
+    male_count = 0
+    female_count = 0
     
     User.all.each do |u|
-      (count = count + 1) if (u.current_location == location)
+      if (u.current_location == location)
+        (male_count = male_count + 1) if (u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Male").first.present? ? u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Male").first.could_be : false)
+        (female_count = female_count + 1) if (u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Female").first.present? ? u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Female").first.could_be : false)
+      end
     end
+    total_count = male_count + female_count
     
-    count
+    {total: total_count, male: male_count, female: female_count}
   end
   
   def people_history_count(location)
-    count = 0
+    male_count = 0
+    female_count = 0
     
     User.all.each do |u|
       u.interest_points.where('rank != 0').each do |i|
-        (count = count + 1) if (i.location == location)
+        if (i.location == location)
+          (male_count = male_count + 1) if (u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Male").first.present? ? u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Male").first.could_be : false)
+        (female_count = female_count + 1) if (u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Female").first.present? ? u.profiles.includes(:characteristic).where('characteristics.attributeCategories = ?', "Female").first.could_be : false)
+        end
       end
-    end
+     end
+     total_count = male_count + female_count
     
-    count
+    {total: total_count, male: male_count, female: female_count}
   end
   
 end
