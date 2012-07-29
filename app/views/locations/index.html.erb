@@ -1,0 +1,30 @@
+<div class="page-header">
+	<h1><%= t 'title.all' %> <%= t('activerecord.models.locations') %></h1>
+</div>
+
+<%= link_to t('title.new') + ' ' + t('activerecord.models.location'), new_location_path, :class => 'btn btn-primary pull-right' %>
+<br/><br/>
+
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+		<tr>
+						<th><%= t('activerecord.attributes.location.longitude') %></th>
+						<th><%= t('activerecord.attributes.location.latitude') %></th>
+						<th><%= t('activerecord.attributes.location.radius') %></th>
+						<th><%= t('main.options') %></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<%= content_tag_for(:tr, @locations) do |location| %>
+						<td><%= location.longitude %></td>
+						<td><%= location.latitude %></td>
+						<td><%= location.radius %></td>
+						<td>
+				<%= link_to raw('<i class="icon-eye-open"></i>'), location %>
+				<%= link_to raw('<i class="icon-edit"></i>'), edit_location_path(location) %>
+				<%= link_to raw('<i class="icon-remove"></i>'), location, confirm: t('main.confirm'), method: :delete %>
+			</td>
+		<% end %>
+	</tbody>
+</table>

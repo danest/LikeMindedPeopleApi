@@ -1,4 +1,6 @@
 App::Application.routes.draw do
+  resources :locations
+
   resources :characteristics
 
   resources :users

@@ -1,0 +1,21 @@
+<div class="page-header">
+	<h1><%= t('activerecord.models.location') %></h1>
+</div>
+
+<p>
+  <b><%= t('activerecord.attributes.location.longitude') %>:</b>
+  <%= @location.longitude %>
+</p>
+<p>
+  <b><%= t('activerecord.attributes.location.latitude') %>:</b>
+  <%= @location.latitude %>
+</p>
+<p>
+  <b><%= t('activerecord.attributes.location.radius') %>:</b>
+  <%= @location.radius %>
+</p>
+
+<div class="form-actions">
+	<%= link_to t('main.edit'), edit_location_path(@location), class: 'btn btn-primary' %>
+	<%= link_to t('main.cancel'), locations_path, class: 'btn' %>
+</div>

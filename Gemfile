@@ -10,13 +10,12 @@ group :production do
 end
 
 group :development, :test do
-  gem 'sqlite3'
+  gem 'mysql2'
 end
 
 #gem "paperclip"
 
 #gem 'devise'
-
 
 gem 'simple_form', git: 'git://github.com/plataformatec/simple_form.git'
 
@@ -37,11 +36,9 @@ group :assets do
 	
 end
 
-
-
 gem 'jquery-rails'
 
-#gem 'awesome_print'
+gem 'awesome_print'
 
 #gem 'populator'
 
