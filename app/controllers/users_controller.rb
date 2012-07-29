@@ -41,7 +41,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     user_profile = JSON.parse(params[:user_profile])
-    @user = User.new(user_profile['user'])
+    @user = User.find_or_create_by_fb_id(user_profile['user'])
 
     respond_to do |format|
       if @user.save
@@ -87,11 +87,18 @@ class UsersController < ApplicationController
   
   private
   
-  def create_profile(user, user_profile)
-    user_profile.each do |c|
+  def create_profile(user, profile)
+    profile.each do |c|
       characteristic = Characteristic.where(key: c['key'], attributeCategories: c['attributeCategories'])
       characteristic = Characteristic.create!(key: c['key'], attributeCategories: c['attributeCategories']) if characteristic.blank?
-      user.profiles << Profile.new(characteristic_id: characteristic, likelihood: c['likelihood'])
+      profile = Profile.where(characteristic_id: characteristic).first
+      if profile.present?
+        profile.update_attributes!(likelihood: c['likelihood'])
+      else
+        profile = Profile.create(characteristic_id: characteristic, likelihood: c['likelihood'])
+        user.profiles << profile
+      end
+      
     end
   end
   
