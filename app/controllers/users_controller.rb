@@ -74,9 +74,12 @@ class UsersController < ApplicationController
   
   def update_location
     @user = User.where(fb_id: params[:fb_id]).first
+    
+    sync = params[:location].present? ? sync_location(@user,JSON.parse(params[:location])) : false
+    @user.interest_points.where(rank: 0).first.update_attributes!(location_id: nil) if (sync == false)
 
     respond_to do |format|
-      if sync_location(@user,JSON.parse(params[:location]))
+      if sync
         format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.updated', model: @user.class.model_name.human)}" }
         format.json { head :no_content }
       else

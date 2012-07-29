@@ -11,9 +11,11 @@ class LocationsController < ApplicationController
   end
   
   def index_filter
+    @user = User.where(fb_id: params[:fb_id]).first
     location_filter = JSON.parse(params[:location_filter])
+    moment = location_filter['moment']
     @locations = Location.within(location_filter['filter'], :origin => [location_filter['latitude'],location_filter['longitude']])
-    locations_details = get_location_details(@locations)
+    locations_details = get_location_details(moment, @locations)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -95,11 +97,15 @@ class LocationsController < ApplicationController
   
   private
   
-  def get_location_details(locations)
+  def get_location_details(moment, locations)
     location_details = Array.new
     
     locations.each do |l|
-      location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_now_count: people_now_count(l)}
+      if (moment == "Now")
+        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_now_count: people_now_count(l)}
+      elsif (moment == "History")
+        location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_history_count: people_history_count(l)}
+      end
     end
     
     location_details
@@ -110,6 +116,18 @@ class LocationsController < ApplicationController
     
     User.all.each do |u|
       (count = count + 1) if (u.current_location == location)
+    end
+    
+    count
+  end
+  
+  def people_history_count(location)
+    count = 0
+    
+    User.all.each do |u|
+      u.interest_points.where('rank != 0').each do |i|
+        (count = count + 1) if (i.location == location)
+      end
     end
     
     count

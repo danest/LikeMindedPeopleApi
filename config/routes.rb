@@ -1,11 +1,12 @@
 App::Application.routes.draw do
   resources :locations
-  post 'filter_locations' => 'locations#index_filter'
+  post 'filter_locations/:fb_id' => 'locations#index_filter'
 
   resources :characteristics
 
+  post 'users/:id' => 'users#update'
   resources :users
-  put 'update_location/:fb_id' => 'users#update_location'
+  post 'update_location/:fb_id' => 'users#update_location'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
