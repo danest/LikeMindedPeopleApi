@@ -13,10 +13,11 @@ class LocationsController < ApplicationController
   def index_filter
     location_filter = JSON.parse(params[:location_filter])
     @locations = Location.within(location_filter['filter'], :origin => [location_filter['latitude'],location_filter['longitude']])
+    locations_details = get_location_details(@locations)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @locations }
+      format.json { render json: locations_details }
     end
   end
 
@@ -90,4 +91,28 @@ class LocationsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  
+  private
+  
+  def get_location_details(locations)
+    location_details = Array.new
+    
+    locations.each do |l|
+      location_details << {latitude: l.latitude, longitude: l.longitude, radius: l.radius, people_now_count: people_now_count(l)}
+    end
+    
+    location_details
+  end
+  
+  def people_now_count(location)
+    count = 0
+    
+    User.all.each do |u|
+      (count = count + 1) if (u.current_location == location)
+    end
+    
+    count
+  end
+  
 end

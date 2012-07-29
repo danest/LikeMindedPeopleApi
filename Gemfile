@@ -48,7 +48,7 @@ gem 'awesome_print'
 
 #gem 'faker'
 
-#gem 'yaml_db'
+gem 'yaml_db'
 
 
 # To use ActiveModel has_secure_password
