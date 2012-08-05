@@ -1,6 +1,7 @@
 App::Application.routes.draw do
   resources :locations
   post 'filter_locations/:fb_id' => 'locations#index_filter'
+  post 'google_locations' => 'locations#index_google'
 
   resources :characteristics
 

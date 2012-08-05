@@ -22,6 +22,19 @@ class LocationsController < ApplicationController
       format.json { render json: locations_details }
     end
   end
+  
+  def index_google
+    #@user = User.where(fb_id: params[:fb_id]).first
+    
+    @client = GooglePlaces::Client.new('AIzaSyB1dI5uqHCX2lSjKJBqcz8DUD_VcpXmCbI')
+    location_google = JSON.parse(params[:location_google])
+    @locations = @client.spots(location_google['latitude'],location_google['longitude'], :types => location_google['type'])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @locations }
+    end
+  end
 
   # GET /locations/1
   # GET /locations/1.json
