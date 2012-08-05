@@ -28,7 +28,7 @@ class LocationsController < ApplicationController
     
     @client = GooglePlaces::Client.new('AIzaSyB1dI5uqHCX2lSjKJBqcz8DUD_VcpXmCbI')
     location_google = JSON.parse(params[:location_google])
-    @locations = @client.spots(location_google['latitude'],location_google['longitude'], :types => location_google['type'])
+    @locations = @client.spots(location_google['latitude'],location_google['longitude'], :types => location_google['type'], :name => location_google['name'])
 
     respond_to do |format|
       format.html # index.html.erb
