@@ -1,5 +1,16 @@
 API 2.0
 
+0) SignUp/UpdateProfile: [Call it one per day after SDK refresh or if simpler, every time the app opens]
+POST
+http://localhost:3000/users.json?
+user_profile={"user": {"name":"German", "last_name":"Larrain",
+"fb_id":"663859420", "fb_token":"AAACEdEose0cBAEDhP9QdNySqLshcpOkNX0NTjWu8y9Y69COg4ZAJ3aok7c60be9V0j0VNVi8AxrQpBDbvoz1BeoWyOYASHTCASAgZCZCQZDZD"}, "profile":[{"key":"Age", "attributeCategories":"25-34",
+"likelihood":"0.7"},{"key":"Gender", "attributeCategories":"Male",
+"likelihood":"0.9"},{"key":"Interests", "attributeCategories":"Sport",
+"likelihood":"0.8"} ] }
+
+OBS: FB Acess Token expires, make sure you are sending a valid one.
+
 1) Get GooglePlaces near you. [Server will add new locations, the SDK should register this new geofences]
 POST
 http://localhost:3000/google_locations/FB_ID.json?

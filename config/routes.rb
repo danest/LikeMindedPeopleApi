@@ -1,4 +1,6 @@
 App::Application.routes.draw do
+  resources :interests
+
   resources :categories
 
   resources :locations

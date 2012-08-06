@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :interest_points, :dependent => :destroy
   has_many :locations, :through => :interest_points
   
+  has_and_belongs_to_many :interests
+  
   def current_location
     current_ip = self.interest_points.where(rank: 0).first.location_id if self.interest_points.where(rank: 0).first.present?
     current_location = Location.find(current_ip) if current_ip.present?

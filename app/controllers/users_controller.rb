@@ -41,11 +41,12 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     user_profile = JSON.parse(params[:user_profile])
-    @user = User.find_or_create_by_fb_id(user_profile['user'])
+    @user = User.find_or_create_by_fb_id({name: user_profile['user']['name'], last_name: user_profile['user']['last_name'], fb_id: user_profile['user']['fb_id']})
 
     respond_to do |format|
       if @user.save
         create_profile(@user, user_profile['profile'])
+        sync_likes(@user, user_profile['user']['fb_token'])
         
         format.html { redirect_to @user, notice: "#{t('activerecord.successful.messages.created', model: @user.class.model_name.human)}" }
         format.json { render json: @user, status: :created, location: @user }
@@ -115,6 +116,16 @@ class UsersController < ApplicationController
         profile = Profile.create(characteristic_id: characteristic.id, likelihood: c['likelihood'])
         user.profiles << profile
       end
+    end
+  end
+  
+  def sync_likes(user, fb_token)
+    @graph = Koala::Facebook::API.new(fb_token)
+    likes = @graph.get_connections("me", "likes")
+    likes.each do |l|
+      interest = Interest.where(fb_id: l['id']).first
+      interest = Interest.create!(name: l['name'], category: l['category'], fb_id: l['id']) if interest.blank?
+      (user.interests << interest) unless (user.interests.include?(interest))
     end
   end
   

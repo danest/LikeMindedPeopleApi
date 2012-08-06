@@ -18,6 +18,8 @@ group :development, :test do
   #gem 'pg'
 end
 
+gem 'koala'
+
 #gem "paperclip"
 
 #gem 'devise'

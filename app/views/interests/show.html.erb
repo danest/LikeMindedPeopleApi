@@ -1,0 +1,21 @@
+<div class="page-header">
+	<h1><%= t('activerecord.models.interest') %></h1>
+</div>
+
+<p>
+  <b><%= t('activerecord.attributes.interest.name') %>:</b>
+  <%= @interest.name %>
+</p>
+<p>
+  <b><%= t('activerecord.attributes.interest.category') %>:</b>
+  <%= @interest.category %>
+</p>
+<p>
+  <b><%= t('activerecord.attributes.interest.fb_id') %>:</b>
+  <%= @interest.fb_id %>
+</p>
+
+<div class="form-actions">
+	<%= link_to t('main.edit'), edit_interest_path(@interest), class: 'btn btn-primary' %>
+	<%= link_to t('main.cancel'), interests_path, class: 'btn' %>
+</div>
