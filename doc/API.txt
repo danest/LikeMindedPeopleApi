@@ -6,6 +6,11 @@ http://localhost:3000/google_locations/FB_ID.json?
 location_google={"latitude":"37.777981", "longitude":"-122.394264", "type":"restaurant", "name":"Lusk"}
 [OBS: If there is no type or name just put: "type":"" ]
 
+2) Get Locations for Geofences, Filter by Miles:
+POST
+http://localhost:3000/filter_locations/FB_ID.json?
+location_filter={"latitude":"37.777981", "longitude":"-122.394264", "filter":"0.05"}
+
 ----------------------------------------------------------------------------------------------------------------------
 
 API:

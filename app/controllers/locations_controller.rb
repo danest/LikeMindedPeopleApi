@@ -11,11 +11,12 @@ class LocationsController < ApplicationController
   end
   
   def index_filter
-    @user = User.where(fb_id: params[:fb_id]).first
+    #@user = User.where(fb_id: params[:fb_id]).first
     location_filter = JSON.parse(params[:location_filter])
-    moment = location_filter['moment']
+    #moment = location_filter['moment']
     @locations = Location.within(location_filter['filter'], :origin => [location_filter['latitude'],location_filter['longitude']])
-    locations_details = get_location_details(moment, @locations)
+    #locations_details = get_location_details(moment, @locations)
+    locations_details = get_location_details(@locations)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -115,7 +116,17 @@ class LocationsController < ApplicationController
   
   private
   
-  def get_location_details(moment, locations)
+  def get_location_details(locations)
+    location_details = Array.new
+    
+    locations.each do |l|
+      location_details << {name: l.name, latitude: l.latitude, longitude: l.longitude, radius: l.radius}
+    end
+    
+    location_details
+  end
+  
+  def OLD_get_location_details(moment, locations)
     location_details = Array.new
     
     locations.each do |l|
@@ -130,6 +141,32 @@ class LocationsController < ApplicationController
   end
   
   def people_now_count(location)
+    count = 0
+    
+    User.all.each do |u|
+      if (u.current_location == location)
+        count = count + 1
+      end
+    end
+    
+    count
+  end
+  
+  def people_history_count(location)
+    count = 0
+    
+    User.all.each do |u|
+      u.interest_points.where('rank != 0').each do |i|
+        if (i.location == location)
+          count = count + 1
+         end
+      end
+     end
+    
+    count
+  end
+  
+  def OLD_people_now_count(location)
     male_count = 0
     female_count = 0
     
@@ -144,7 +181,7 @@ class LocationsController < ApplicationController
     {total: total_count, male: male_count, female: female_count}
   end
   
-  def people_history_count(location)
+  def OLD_people_history_count(location)
     male_count = 0
     female_count = 0
     
