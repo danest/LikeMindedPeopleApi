@@ -5,10 +5,12 @@ class Location < ActiveRecord::Base
                    :lat_column_name => :latitude,
                    :lng_column_name => :longitude
 
-  attr_accessible :latitude, :longitude, :radius
+  attr_accessible :latitude, :longitude, :radius, :name
   
   has_many :interest_points, :dependent => :destroy
   has_many :users, :through => :interest_points
+  
+  has_and_belongs_to_many :categories
   
   def important_characteristics
     most_important = Hash.new

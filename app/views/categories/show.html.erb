@@ -1,0 +1,13 @@
+<div class="page-header">
+	<h1><%= t('activerecord.models.category') %></h1>
+</div>
+
+<p>
+  <b><%= t('activerecord.attributes.category.name') %>:</b>
+  <%= @category.name %>
+</p>
+
+<div class="form-actions">
+	<%= link_to t('main.edit'), edit_category_path(@category), class: 'btn btn-primary' %>
+	<%= link_to t('main.cancel'), categories_path, class: 'btn' %>
+</div>

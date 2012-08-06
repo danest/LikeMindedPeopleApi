@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120728224904) do
+ActiveRecord::Schema.define(:version => 20120805225415) do
+
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "categories_locations", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "location_id"
+  end
 
   create_table "characteristics", :force => true do |t|
     t.string   "key"
@@ -34,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20120728224904) do
     t.string   "radius"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "name"
   end
 
   create_table "profiles", :force => true do |t|

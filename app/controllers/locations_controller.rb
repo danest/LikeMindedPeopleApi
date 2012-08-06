@@ -28,11 +28,16 @@ class LocationsController < ApplicationController
     
     @client = GooglePlaces::Client.new('AIzaSyB1dI5uqHCX2lSjKJBqcz8DUD_VcpXmCbI')
     location_google = JSON.parse(params[:location_google])
-    @locations = @client.spots(location_google['latitude'],location_google['longitude'], :types => location_google['type'], :name => location_google['name'])
-
+    google_locations = @client.spots(location_google['latitude'],location_google['longitude'], :types => location_google['type'], :name => location_google['name'])
+    radius = 25
+    @locations_api = google_locations.map{|l| {name: l.name, latitude: l.lat, longitude: l.lng, types: l.types, radius: radius}}
+    sync_locations(@locations_api)
+    
+    @locations_app = google_locations.map{|l| {name: l.name, latitude: l.lat, longitude: l.lng, radius: radius}}
+    
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @locations }
+      format.json { render json: @locations_app }
     end
   end
 
@@ -154,6 +159,22 @@ class LocationsController < ApplicationController
      total_count = male_count + female_count
     
     {total: total_count, male: male_count, female: female_count}
+  end
+  
+  def sync_locations(locations)
+    locations.each do |l|
+      location = Location.where(longitude: l[:longitude], latitude: l[:latitude]).first
+      if location.blank?
+        location = Location.create!(longitude: l[:longitude], latitude: l[:latitude], name: l[:name], radius: l[:radius])
+      else
+        location.update_attributes!(name: l[:name], radius: l[:radius])
+      end
+      
+      l[:types].each do |t|
+        category = Category.find_or_create_by_name(t)
+        (location.categories << category) unless (location.categories.include?(category))
+      end
+    end
   end
   
 end

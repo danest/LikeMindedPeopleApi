@@ -1,0 +1,39 @@
+API 2.0
+
+1) Get GooglePlaces near you. [Server will add new locations, the SDK should register this new geofences]
+POST
+http://localhost:3000/google_locations/FB_ID.json?
+location_google={"latitude":"37.777981", "longitude":"-122.394264", "type":"restaurant", "name":"Lusk"}
+[OBS: If there is no type or name just put: "type":"" ]
+
+----------------------------------------------------------------------------------------------------------------------
+
+API:
+
+1) SignUp/UpdateProfile: [Call it one per day after SDK refresh]
+POST
+http://localhost:3000/users.json?
+user_profile={"user": {"name":"German", "last_name":"Larrain",
+"fb_id":"1"}, "profile":[{"key":"Age", "attributeCategories":"25-34",
+"likelihood":"0.7"},{"key":"Gender", "attributeCategories":"Male",
+"likelihood":"0.9"},{"key":"Interests", "attributeCategories":"Sport",
+"likelihood":"0.8"} ] }
+
+2) Set/Update CurrentLocation: (OBS: 'Radius' is in Meters) [Call it regulary, or entering to Geofence]
+POST
+http://localhost:3000/update_location/FB_ID.json?
+location={"latitude":"37.777981", "longitude":"-122.394264", "radius":"100"}
+
+(OBS: If you send and empty body, the current location will be 'nil') [Call it regulary, or going out of the Geofence]
+
+3) 2) Set/Update PointsOfInterest: (OBS: 'Radius' is in Meters) [Call it one per day after SDK refresh]
+POST
+http://localhost:3000//users/FB_ID.json?
+pois={"pois":[{"latitude":"37.778198", "longitude":"-122.393935", "radius":"100", "rank":"1"}, {"latitude":"37.778133", "longitude":"-122.395018", "radius":"100", "rank":"2"}, {"latitude":"37.77895", "longitude":"-122.3946", "radius":"100", "rank":"3"}]}
+
+4) Get Locations, Filter by Miles:
+POST
+http://localhost:3000/filter_locations/FB_ID.json?
+location_filter={"latitude":"37.777981", "longitude":"-122.394264", "filter":"0.05", "moment":"Now"}
+
+(Obs: 'Moment' could be 'Now' or 'History')
